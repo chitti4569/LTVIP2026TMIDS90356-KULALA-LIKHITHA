@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wind Power Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f7fb;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        .value {
+            font-weight: bold;
+            color: #0d6efd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-5">🌬️ Wind Energy Prediction Dashboard</h2>
+
+    <div class="row">
+        <!-- Weather Panel -->
+        <div class="col-md-6 mb-4">
+            <div class="card p-4">
+                <h5 class="mb-3">🌍 Live Weather Data</h5>
+                <form action="/windapi" method="POST">
+                    <input type="text" name="city" class="form-control mb-3" placeholder="Enter City Name" required>
+                    <button class="btn btn-success w-100">Fetch Weather</button>
+                </form>
+
+                {% if speed %}
+                <hr>
+                <p>🌡 Temperature: <span class="value">{{ temp }}</span></p>
+                <p>💧 Humidity: <span class="value">{{ humid }}</span></p>
+                <p>🔽 Pressure: <span class="value">{{ pressure }}</span></p>
+                <p>🌬 Wind Speed: <span class="value">{{ speed }}</span></p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Prediction Panel -->
+        <div class="col-md-6 mb-4">
+            <div class="card p-4">
+                <h5 class="mb-3">⚡ Power Output Prediction</h5>
+                <form action="/y_predict" method="POST">
+
+                    <label class="form-label">Wind Speed (m/s)</label>
+                    <input type="number" step="any" name="WindSpeed" class="form-control mb-3" required>
+
+                    <label class="form-label">Hour (0–23)</label>
+                    <input type="number" name="Hour" class="form-control mb-3" required>
+
+                    <label class="form-label">Month (1–12)</label>
+                    <input type="number" name="Month" class="form-control mb-3" required>
+
+                    <label class="form-label">Day of Year (1–365)</label>
+                    <input type="number" name="DayOfYear" class="form-control mb-4" required>
+
+                    <button class="btn btn-primary w-100">
+                        Predict Energy Output
+                    </button>
+                </form>
+
+                {% if prediction_text %}
+                <hr>
+                <div class="alert alert-success text-center mt-3">
+                    <strong>{{ prediction_text }}</strong>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
